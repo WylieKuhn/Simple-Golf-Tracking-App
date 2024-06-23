@@ -1,10 +1,10 @@
 import streamlit as st
 import sqlite3
-from courses import get_courses
+from functions.courses import get_digital_courses
 
 
 # Connect to the SQLite database
-conn = sqlite3.connect("golfstats.db")
+conn = sqlite3.connect("database/golfstats.db")
 cur = conn.cursor()
 
 
@@ -18,8 +18,9 @@ with st.container():
     # Form definition
     with st.form(key="scores"):
         # Course selection
-        course = st.selectbox(label="Course", options=get_courses(), key="course")
+        course = st.selectbox(label="Course", options=get_digital_courses(), key="course")
         difficulty = st.selectbox(label="Difficulty", options=["Easy", "Hard"], key="difficulty")
+        gameType = st.selectbox(label="Game Type", options=["Full 18", "Front 9", "Back 9"], key="gameType")
 
         # Columns for hole inputs
         col1, col2, col3, col4, col5, col6 = st.columns(6)
@@ -72,6 +73,7 @@ with st.container():
                 print("Scores:", hole_scores)
                 print("Total Strokes:", totalStrokes)
                 st.success("Game logged successfully!")
+
             elif doubleCheckTotalScore != totalStrokes:
                 if doubleCheckTotalScore > totalStrokes:
                     st.error("You total strokes per hole is greater than your inputted total score. Please check your inputs to ensure accuracy")
